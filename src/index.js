@@ -125,7 +125,78 @@ export async function search(title, page) {
             }
 
         } else {
-            console.error("Error: Response status code:", response.status);
+            console.error("Error response status code:", response.status);
+        }
+    } catch (e) {
+        console.error("Error:", e);
+    }
+}
+
+export async function bookInfo(bookId) {
+
+    if (!bookId && typeof bookId != "string") throw new Error("The bookId is invalid");
+
+    try {
+
+        const response = await axios.get(`https://booklog.jp/item/1/${bookId}`, {
+            headers: headers
+        });
+
+        if (response.status === 200) {
+            const $ = cheerio.load(response.data);
+            if ($(".error ts18").text() === "ページが見つかりませんでした。") {
+                return {
+                    success: false,
+                    result: "Page not found."
+                }
+            } else {
+
+                let results = {
+                    imageUrl: "",
+                    name: "",
+                    author: "",
+                    publisher: "",
+                    datePublished: "",
+                    ratingValue: "",
+                    infoUsers: "",
+                    reviewCount: "",
+                    amazonUrl: ""
+                };
+
+                const imageUrl = $("img[itemprop='thumbnailUrl']").attr("src");
+                results.imageUrl = imageUrl || undefined;
+
+                const name = $("h1[itemprop='name']").text();
+                results.name = name || undefined;
+
+                const author = $("a[itemprop='author']").text();
+                results.author = author || undefined;
+
+                const publisher = $("span[itemprop='publisher']").text();
+                results.publisher = publisher || undefined;
+
+                const datePublished = $("span[itemprop='datePublished']").text();
+                results.datePublished = datePublished || undefined;
+
+                const ratingValue = $(".rating-value").text();
+                results.ratingValue = ratingValue[0] || undefined;
+                
+                const infoUsers = $(".users span").text();
+                results.infoUsers = infoUsers || undefined;
+                
+                const reviewCount = $("span[itemprop='reviewCount']").text();
+                results.reviewCount = reviewCount || undefined;
+
+                const amazonUrl = $(".btn-amazon-detail.middle").attr("href");
+                results.amazonUrl = amazonUrl || undefined;
+
+                return {
+                    success: true,
+                    results: results
+                }
+            }
+        } else {
+            console.error("Error response status code:", response.status);
         }
     } catch (e) {
         console.error("Error:", e);

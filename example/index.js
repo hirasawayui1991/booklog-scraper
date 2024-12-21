@@ -8,5 +8,6 @@ import * as booklog from "../src/index.js";
     // Searches for books based on the provided title and page.
     console.log(await booklog.search("本の名前", 2));
 
+    console.log(await booklog.bookInfo("B0DPLWK3TQ"));
 
 })();

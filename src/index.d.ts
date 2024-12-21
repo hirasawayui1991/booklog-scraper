@@ -28,3 +28,20 @@ export declare function search(title: string, page: number): Promise<{
 export declare class InvalidParameterError extends Error {
     constructor(message: string);
 }
+
+export interface BookInfoResult {
+    imageUrl: string | undefined;
+    name: string;
+    author: string | undefined;
+    publisher: string | undefined;
+    datePublished: string | undefined;
+    ratingValue: string;
+    infoUsers: string;
+    reviewCount: string;
+    amazonUrl: string | undefined;
+}
+
+export declare function bookInfo(bookId: string): Promise<{
+    success: boolean;
+    results?: BookInfoResult[];  
+}>;
