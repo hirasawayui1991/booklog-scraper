@@ -93,12 +93,6 @@ export async function search(title, page) {
                     Object.assign(results[index] || (results[index] = {}), { author: author });
                 });
 
-                $(".itemInfoElmBox").each((index, element) => {
-                    const bookType = $(element).find(".itemInfoElm").eq(1).text().trim();
-                    if (bookType === undefined || bookType === null) return Object.assign(results[index] || (results[index] = {}), { bookType: "None" });
-                    Object.assign(results[index] || (results[index] = {}), { bookType: bookType });
-                });
-
                 $(".info-users .num").each((index, element) => {
                     const infoUsers = $(element).text();
                     if (infoUsers === undefined || infoUsers === null) return Object.assign(results[index] || (results[index] = {}), { infoUsers: "None" });
