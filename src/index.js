@@ -222,6 +222,12 @@ export async function bookInfo(bookId) {
     }
 }
 
+/**
+ * 
+ * @param {string} bookType - The type of book you want to get.
+ * @param {string} aggregationPeriod - Aggregation period.
+ * @returns {Promise<Object>} - Success status and ranking result.
+ */
 export async function ranking(bookType, aggregationPeriod) {
 
     const bookTypes = [ "book", "bunko", "shinsho", "comic", "honour" ];
