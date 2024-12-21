@@ -120,15 +120,21 @@ export async function search(title, page) {
                 return {
                     success: true,
                     page: page,
-                    results: results
+                    result: results
                 }
             }
 
         } else {
-            console.error("Error response status code:", response.status);
+            return {
+                success: false,
+                result: `Error: response status code: ${response.status}`
+            }
         }
     } catch (e) {
-        console.error("Error:", e);
+        return {
+            success: false,
+            result: `Error: ${e}`
+        }
     }
 }
 
@@ -198,13 +204,82 @@ export async function bookInfo(bookId) {
 
                 return {
                     success: true,
-                    results: results
+                    result: results
                 }
             }
         } else {
-            console.error("Error response status code:", response.status);
+            return {
+                success: false,
+                result: `Error: response status code: ${response.status}`
+            }
         }
     } catch (e) {
-        console.error("Error:", e);
+        return {
+            success: false,
+            result: `Error: ${e}`
+        }
+    }
+}
+
+export async function ranking(bookType, aggregationPeriod) {
+
+    const bookTypes = [ "book", "bunko", "shinsho", "comic", "honour" ];
+    const aggregationPeriods = [ "daily", "weekly", "monthly", "annual" ];
+
+    if (!bookTypes.includes(bookType)) throw new Error("The book type is invalid");
+    if (!aggregationPeriods.includes(aggregationPeriod)) throw new Error("The aggregation period is invalid");
+
+    const reqLink = aggregationPeriod === "daily"
+        ? `https://booklog.jp/ranking/${bookType}`
+        : `https://booklog.jp/ranking/${aggregationPeriod}/${bookType}`;
+
+        console.log(reqLink);
+    const pages = [1, 2, 3, 4, 5];
+
+    const results = [];
+
+    for (const page of pages) {
+
+        try {
+            
+            const response = await axios.get(`${reqLink}?page=${page}`, {
+                headers: headers()
+            });
+
+            if (response.status === 200) {
+
+                const $ = cheerio.load(response.data);
+
+                $(".thumb img").each((index, element) => {
+                    const imageUrl = $(element).attr("src");
+                    if (imageUrl === undefined || imageUrl === null) return Object.assign(results[index] || (results[index] = {}), { imageUrl: "None" });
+                    Object.assign(results[index] || (results[index] = {}), {
+                        ranking: index
+                        imageUrl: imageUrl
+                    });
+                });
+
+                $(".titleLink").each((index, element) => {
+                    const title = $(element).text();
+                    if (title === undefined || title === null) return Object.assign(results[index] || (results[index] = {}), { title: "None" });
+                    Object.assign(results[index] || (results[index] = {}), { title: title });
+                });
+
+                return {
+                    success: true,
+                    result: results
+                }
+            } else {
+                return {
+                    success: false,
+                    result: `Error: response status coode: ${response.status}`
+                }
+            }
+        } catch (e) {
+            return {
+                success: false,
+                result: `Error: ${e}`
+            }
+        }
     }
 }
