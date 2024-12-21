@@ -132,6 +132,12 @@ export async function search(title, page) {
     }
 }
 
+/**
+ * Gets the datails of the book given its ID.
+ * 
+ * @param {string} bookId - The ID of the book to be retrieved.
+ * @returns {Promise<Object>} - The result of the search with success status and searchresults.
+ */
 export async function bookInfo(bookId) {
 
     if (!bookId && typeof bookId != "string") throw new Error("The bookId is invalid");
