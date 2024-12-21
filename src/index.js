@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import { BooklogError } from "./error/index.js";
 
 let cookie = "";
 
@@ -48,8 +49,8 @@ const headers = () => {
  */
 export async function search(title, page) {
 
-    if (!title || typeof title != "string") throw new Error("The title is invalid");
-    if (isNaN(page) || page === 0) throw new Error("The page is invalid");
+    if (!title || typeof title != "string") throw new BooklogError("The title is invalid");
+    if (isNaN(page) || page === 0) throw new BooklogError("The page is invalid");
 
     try {
 
@@ -146,7 +147,7 @@ export async function search(title, page) {
  */
 export async function bookInfo(bookId) {
 
-    if (!bookId && typeof bookId != "string") throw new Error("The bookId is invalid");
+    if (!bookId && typeof bookId != "string") throw new BooklogError("The bookId is invalid");
 
     try {
 
@@ -226,8 +227,8 @@ export async function ranking(bookType, aggregationPeriod) {
     const bookTypes = [ "book", "bunko", "shinsho", "comic", "honour" ];
     const aggregationPeriods = [ "daily", "weekly", "monthly", "annual" ];
 
-    if (!bookTypes.includes(bookType)) throw new Error("The book type is invalid");
-    if (!aggregationPeriods.includes(aggregationPeriod)) throw new Error("The aggregation period is invalid");
+    if (!bookTypes.includes(bookType)) throw new BooklogError("The book type is invalid");
+    if (!aggregationPeriods.includes(aggregationPeriod)) throw new BooklogError("The aggregation period is invalid");
 
     const reqLink = aggregationPeriod === "daily"
         ? `https://booklog.jp/ranking/${bookType}`
