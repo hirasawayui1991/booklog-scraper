@@ -254,7 +254,7 @@ export async function ranking(bookType, aggregationPeriod) {
                     const imageUrl = $(element).attr("src");
                     if (imageUrl === undefined || imageUrl === null) return Object.assign(results[index] || (results[index] = {}), { imageUrl: "None" });
                     Object.assign(results[index] || (results[index] = {}), {
-                        ranking: index
+                        ranking: index,
                         imageUrl: imageUrl
                     });
                 });

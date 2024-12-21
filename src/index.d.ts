@@ -21,13 +21,8 @@ export interface SearchResult {
 export declare function search(title: string, page: number): Promise<{
     success: boolean;
     page: string | number;
-    result?: string;
-    results?: SearchResult[];
+    result?: SearchResult[];
 }>;
-
-export declare class InvalidParameterError extends Error {
-    constructor(message: string);
-}
 
 export interface BookInfoResult {
     imageUrl: string | undefined;
@@ -43,5 +38,16 @@ export interface BookInfoResult {
 
 export declare function bookInfo(bookId: string): Promise<{
     success: boolean;
-    results?: BookInfoResult[];  
+    result?: BookInfoResult[];  
+}>;
+
+export interface RankingResult {
+    ranking: number | undefined;
+    imageUrl: string | undefined;
+    title: string | undefined;
+}
+
+export declare function ranking(bookType: string, aggregationPeriod: string): Promise<{
+    success: boolean;
+    result?: RankingResult[];
 }>;
