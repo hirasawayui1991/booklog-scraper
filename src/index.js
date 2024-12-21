@@ -223,6 +223,7 @@ export async function bookInfo(bookId) {
 }
 
 /**
+ * Get ranking based on specified items.
  * 
  * @param {string} bookType - The type of book you want to get.
  * @param {string} aggregationPeriod - Aggregation period.
