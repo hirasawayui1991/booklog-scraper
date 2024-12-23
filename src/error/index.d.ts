@@ -1,3 +1,3 @@
-export declare class InvalidParameterError extends Error {
+export declare class BooklogError extends Error {
     constructor(message: string);
 }
